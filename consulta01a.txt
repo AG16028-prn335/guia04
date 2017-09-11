@@ -1,0 +1,17 @@
+SELECT DISTINCT m
+FROM Meta m
+JOIN m.postList p
+JOIN p.postPasoList pl
+WHERE pl.idUsuario = (
+    SELECT pl.idUsuario
+    FROM Post p
+    JOIN p.postPasoList pl
+    GROUP BY pl.idUsuario
+    HAVING COUNT(pl.idUsuario) >= ALL (
+        SELECT COUNT(pl1.idUsuario)
+        FROM Post p1
+        JOIN p1.postPasoList pl1
+        GROUP BY pl1.idUsuario
+    )
+)
+
